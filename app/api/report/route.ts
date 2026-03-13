@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 
 // Simple in-memory rate limiter (resets on server restart)
 // For production you'd use Redis, but this is fine for free tier
