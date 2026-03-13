@@ -22,6 +22,23 @@ function isRateLimited(ip: string): boolean {
   return false
 }
 
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url)
+  const limit = parseInt(searchParams.get('limit') || '10')
+
+  const { data, error } = await supabaseAdmin
+    .from('community_reports')
+    .select('id, area_name, status, description, submitted_at, upvotes')
+    .eq('approved', true)
+    .eq('is_active', true)
+    .order('submitted_at', { ascending: false })
+    .limit(limit)
+
+  if (error) return Response.json({ error: error.message }, { status: 500 })
+
+  return Response.json({ reports: data || [] })
+}
+
 export async function POST(req: NextRequest) {
   // Get IP for rate limiting
   const ip = req.headers.get('x-forwarded-for') || 'unknown'
