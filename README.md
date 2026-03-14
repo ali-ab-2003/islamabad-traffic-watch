@@ -8,7 +8,7 @@ A free, community-powered web app showing real-time road status across Islamabad
 
 ## Live Demo
 
-> [Replace with your Vercel URL once live publicly.](https://islamabad-traffic-watch.vercel.app/)
+> [Islamabad Traffic Watch](https://islamabad-traffic-watch.vercel.app/)
 
 ---
 
