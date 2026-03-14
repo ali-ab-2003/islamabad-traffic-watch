@@ -1,21 +1,25 @@
 'use client'
-import { useSearch }        from '@/hooks/useSearch'
-import { useActiveAlerts }  from '@/hooks/useActiveAlerts'
-import SearchBar            from '../components/SearchBar'
-import SearchResults        from '../components/SearchResults'
-import ActiveAlertsFeed     from '../components/ActiveAlertsFeed'
+import { useSearch }       from '@/hooks/useSearch'
+import { useActiveAlerts } from '@/hooks/useActiveAlerts'
+import SearchBar           from '@/components/SearchBar'
+import SearchResults       from '@/components/SearchResults'
+import ActiveAlertsFeed    from '@/components/ActiveAlertsFeed'
+import Link                from 'next/link'
 
 export default function HomePage() {
-  const search  = useSearch()
-  const feed    = useActiveAlerts()
+  const search = useSearch()
+  const feed   = useActiveAlerts()
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="min-h-screen bg-zinc-950 pb-20">
+
       {/* Header */}
-      <div className="bg-zinc-900 border-b border-zinc-800/60 sticky top-0 z-10
-                      backdrop-blur-sm bg-zinc-900/95">
-        <div className="max-w-2xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-4">
+      <div className="bg-zinc-900/95 backdrop-blur border-b border-zinc-800/60
+                      sticky top-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 pt-4 pb-3">
+
+          {/* Title row */}
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2.5">
               <span className="text-2xl">🚦</span>
               <div>
@@ -27,43 +31,36 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              {feed.alerts.length > 0 && (
-                <span className="bg-red-500/20 text-red-400 text-xs font-semibold
-                                 px-2.5 py-1 rounded-full border border-red-500/20
-                                 animate-pulse">
-                  {feed.alerts.length} active
-                </span>
-              )}
-              <a
-                href="/report"
-                className="text-zinc-400 hover:text-white text-sm transition-colors"
-              >
-                Report
-              </a>
-            </div>
+            {feed.alerts.length > 0 && (
+              <span className="bg-red-500/20 text-red-400 text-xs font-semibold
+                               px-2.5 py-1 rounded-full border border-red-500/20
+                               animate-pulse">
+                {feed.alerts.length} active
+              </span>
+            )}
           </div>
 
-          {/* Search bar */}
+          {/* Search */}
           <SearchBar
             value={search.query}
             onChange={search.setQuery}
             loading={search.loading}
           />
 
-          {/* Legend */}
-          <div className="flex items-center gap-4 mt-3 text-xs text-zinc-600">
-            <span>🔴 Blocked</span>
-            <span>🟡 Diversion</span>
-            <span>🟠 Slow</span>
-            <span>🟢 Open</span>
-            <span>⚪ No Reports</span>
+          {/* Legend — scrollable on very small screens */}
+          <div className="flex items-center gap-3 mt-2.5 text-xs text-zinc-600
+                          overflow-x-auto pb-0.5 scrollbar-none">
+            <span className="shrink-0">🔴 Blocked</span>
+            <span className="shrink-0">🟡 Diversion</span>
+            <span className="shrink-0">🟠 Slow</span>
+            <span className="shrink-0">🟢 Open</span>
+            <span className="shrink-0">⚪ No Reports</span>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-5">
+      <div className="max-w-2xl mx-auto px-4 py-4">
         {search.isSearching ? (
           <SearchResults
             results={search.results}
@@ -73,37 +70,58 @@ export default function HomePage() {
           />
         ) : (
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-3">
               <p className="text-zinc-400 text-sm font-medium">
                 {feed.loading
-                  ? 'Loading alerts...'
+                  ? 'Loading...'
                   : feed.alerts.length > 0
-                    ? `${feed.alerts.length} active alert${feed.alerts.length > 1 ? 's' : ''}`
+                    ? `${feed.alerts.length} active alert${feed.alerts.length !== 1 ? 's' : ''}`
                     : 'Current road status'
                 }
               </p>
-              <p className="text-zinc-600 text-xs">
-                Updates live
-              </p>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                <p className="text-zinc-600 text-xs">Live</p>
+              </div>
             </div>
-            <ActiveAlertsFeed
-              alerts={feed.alerts}
-              loading={feed.loading}
-            />
+            <ActiveAlertsFeed alerts={feed.alerts} loading={feed.loading} />
           </div>
         )}
       </div>
 
-      {/* Footer */}
-      <div className="max-w-2xl mx-auto px-4 pb-8 mt-8">
-        <div className="border-t border-zinc-800/60 pt-6 flex items-center
-                        justify-between text-xs text-zinc-600">
-          <p>Data from @ITP_Offical + community reports</p>
-          <a href="/admin" className="hover:text-zinc-400 transition-colors">
-            Admin
-          </a>
+      {/* Sticky bottom nav — mobile friendly */}
+      <div className="fixed bottom-0 left-0 right-0 z-20
+                      bg-zinc-900/95 backdrop-blur border-t border-zinc-800/60">
+        <div className="max-w-2xl mx-auto px-4">
+          <div className="flex items-center justify-around py-2">
+            <Link
+              href="/"
+              className="flex flex-col items-center gap-1 py-2 px-6
+                         text-white"
+            >
+              <span className="text-xl">🏠</span>
+              <span className="text-xs font-medium">Home</span>
+            </Link>
+            <Link
+              href="/map"
+              className="flex flex-col items-center gap-1 py-2 px-6
+                         text-zinc-500 hover:text-white transition-colors"
+            >
+              <span className="text-xl">🗺️</span>
+              <span className="text-xs">Map</span>
+            </Link>
+            <Link
+              href="/report"
+              className="flex flex-col items-center gap-1 py-2 px-6
+                         text-zinc-500 hover:text-white transition-colors"
+            >
+              <span className="text-xl">⚠️</span>
+              <span className="text-xs">Report</span>
+            </Link>
+          </div>
         </div>
       </div>
+
     </div>
   )
 }

@@ -21,9 +21,9 @@ const MapClient = dynamic(() => import('./components/MapClient'), {
 type Filter = 'all' | 'blocked' | 'diversion' | 'slow'
 
 export default function MapPage() {
-  const [areas, setAreas]   = useState<any[]>([])
+  const [areas, setAreas]     = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<Filter>('all')
+  const [filter, setFilter]   = useState<Filter>('all')
 
   useEffect(() => {
     fetch('/api/areas/all')
@@ -34,11 +34,8 @@ export default function MapPage() {
       })
   }, [])
 
-  // Count alerts per status for filter badges
   const counts = useMemo(() => {
-    const c: Record<string, number> = {
-      blocked: 0, diversion: 0, slow: 0
-    }
+    const c: Record<string, number> = { blocked: 0, diversion: 0, slow: 0 }
     areas.forEach(a => {
       const s = a.current_status?.status
       if (s && s in c) c[s]++
@@ -49,10 +46,10 @@ export default function MapPage() {
   const activeCount = Object.values(counts).reduce((a, b) => a + b, 0)
 
   return (
-    <div className="h-screen bg-zinc-950 flex flex-col">
+    <div className="h-screen bg-zinc-950 flex flex-col pb-14">
+
       {/* Header */}
-      <div className="bg-zinc-900 border-b border-zinc-800/60
-                      px-4 py-3 shrink-0 z-10">
+      <div className="bg-zinc-900 border-b border-zinc-800/60 px-4 py-3 shrink-0 z-10">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
@@ -85,12 +82,16 @@ export default function MapPage() {
             </div>
           </div>
 
-          {/* Filters */}
-          <MapFilters
-            active={filter}
-            onChange={setFilter}
-            counts={counts}
-          />
+          {/* Filters — horizontally scrollable on small screens */}
+          <div className="overflow-x-auto -mx-4 px-4 pb-1 scrollbar-none">
+            <div className="w-max">
+              <MapFilters
+                active={filter}
+                onChange={setFilter}
+                counts={counts}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -101,6 +102,39 @@ export default function MapPage() {
         )}
         <MapLegend />
       </div>
+
+      {/* Sticky bottom nav */}
+      <div className="fixed bottom-0 left-0 right-0 z-[1001]
+                      bg-zinc-900/95 backdrop-blur border-t border-zinc-800/60">
+        <div className="max-w-2xl mx-auto px-4">
+          <div className="flex items-center justify-around py-2">
+            <Link
+              href="/"
+              className="flex flex-col items-center gap-1 py-2 px-6
+                         text-zinc-500 hover:text-white transition-colors"
+            >
+              <span className="text-xl">🏠</span>
+              <span className="text-xs">Home</span>
+            </Link>
+            <Link
+              href="/map"
+              className="flex flex-col items-center gap-1 py-2 px-6 text-white"
+            >
+              <span className="text-xl">🗺️</span>
+              <span className="text-xs font-medium">Map</span>
+            </Link>
+            <Link
+              href="/report"
+              className="flex flex-col items-center gap-1 py-2 px-6
+                         text-zinc-500 hover:text-white transition-colors"
+            >
+              <span className="text-xl">⚠️</span>
+              <span className="text-xs">Report</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
     </div>
   )
 }

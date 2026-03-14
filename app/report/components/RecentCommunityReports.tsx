@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import AlertBadge from '../../../components/AlertBadge'
+import { ReportCardSkeleton } from '@/components/Skeletons'
 
 interface Report {
   id: string
@@ -30,21 +31,12 @@ export default function RecentCommunityReports({ refreshKey }: Props) {
       .catch(() => setLoading(false))
   }, [refreshKey])
 
-  if (loading) {
-    return (
-      <div className="space-y-2">
-        {[1, 2, 3].map(i => (
-          <div key={i}
-            className="bg-zinc-900 border border-zinc-800/60 rounded-xl
-                       p-4 animate-pulse">
-            <div className="flex justify-between">
-              <div className="h-4 bg-zinc-800 rounded w-28" />
-              <div className="h-5 bg-zinc-800 rounded w-16" />
-            </div>
-          </div>
-        ))}
-      </div>
-    )
+  if (loading) if (loading) {
+  return (
+    <div className="space-y-2">
+      {[1, 2, 3].map(i => <ReportCardSkeleton key={i} />)}
+    </div>
+  )
   }
 
   if (reports.length === 0) {

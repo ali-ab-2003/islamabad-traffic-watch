@@ -21,7 +21,7 @@ export default function SearchBar({ value, onChange, loading }: Props) {
         onChange={e => onChange(e.target.value)}
         placeholder="Search area, sector, or road..."
         className="w-full bg-zinc-900 border border-zinc-700/60 rounded-2xl
-                   pl-11 pr-4 py-4 text-white placeholder-zinc-500
+                   pl-11 pr-4 py-3.5 text-white placeholder-zinc-500
                    focus:outline-none focus:border-zinc-500 focus:bg-zinc-800/80
                    text-base transition-all shadow-lg"
         autoFocus

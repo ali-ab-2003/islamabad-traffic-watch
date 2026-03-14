@@ -15,6 +15,8 @@ export default function ReportForm({ onSubmitted }: Props) {
   const [loading, setLoading]       = useState(false)
   const [done, setDone]             = useState(false)
   const [error, setError]           = useState('')
+  const [roadValue, setRoadValue] = useState('')
+  const [roadName, setRoadName]   = useState('')
 
   async function handleSubmit() {
     if (!areaName) { setError('Please select an area first'); return }
@@ -27,6 +29,7 @@ export default function ReportForm({ onSubmitted }: Props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         area_name:   areaName,
+        road_name:   roadName || undefined,
         status,
         description: description || undefined,
       }),
@@ -60,6 +63,8 @@ export default function ReportForm({ onSubmitted }: Props) {
             setDone(false)
             setAreaValue('')
             setAreaName('')
+            setRoadValue('')
+            setRoadName('')
             setDesc('')
             setStatus('blocked')
           }}
@@ -82,6 +87,15 @@ export default function ReportForm({ onSubmitted }: Props) {
         value={areaValue}
         onChange={v => { setAreaValue(v); if (!v) setAreaName('') }}
         onSelect={r => { setAreaName(r.name_en); setAreaValue(r.name_en) }}
+      />
+
+      <AreaRoadSearch
+        label="Road (optional)"
+        placeholder="Murree Road, Faisal Avenue..."
+        searchType="roads"
+        value={roadValue}
+        onChange={v => { setRoadValue(v); if (!v) setRoadName('') }}
+        onSelect={r => { setRoadName(r.name_en); setRoadValue(r.name_en) }}
       />
 
       {/* Status */}

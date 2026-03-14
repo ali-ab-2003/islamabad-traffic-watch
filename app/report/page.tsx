@@ -65,7 +65,31 @@ export default function ReportPage() {
           <RecentCommunityReports refreshKey={refreshKey} />
         </div>
       </div>
-
+          {/* Sticky bottom nav */}
+      <div className="fixed bottom-0 left-0 right-0 z-20
+                      bg-zinc-900/95 backdrop-blur border-t border-zinc-800/60">
+        <div className="max-w-lg mx-auto px-4">
+          <div className="flex items-center justify-around py-2">
+            <Link href="/"
+              className="flex flex-col items-center gap-1 py-2 px-6
+                         text-zinc-500 hover:text-white transition-colors">
+              <span className="text-xl">🏠</span>
+              <span className="text-xs">Home</span>
+            </Link>
+            <Link href="/map"
+              className="flex flex-col items-center gap-1 py-2 px-6
+                         text-zinc-500 hover:text-white transition-colors">
+              <span className="text-xl">🗺️</span>
+              <span className="text-xs">Map</span>
+            </Link>
+            <Link href="/report"
+              className="flex flex-col items-center gap-1 py-2 px-6 text-white">
+              <span className="text-xl">⚠️</span>
+              <span className="text-xs font-medium">Report</span>
+            </Link>
+          </div>
+        </div>
+      </div>
       {/* Footer */}
       <div className="max-w-lg mx-auto px-4 pb-8 mt-4">
         <p className="text-zinc-600 text-xs text-center leading-relaxed">

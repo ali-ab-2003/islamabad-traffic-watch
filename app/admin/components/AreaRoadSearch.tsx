@@ -79,7 +79,7 @@ export default function AreaRoadSearch({
                 setOpen(false)
                 setResults([])
               }}
-              className="w-full text-left px-4 py-2.5 hover:bg-zinc-700/80
+              className="w-full text-left px-4 py-3 sm:py-2.5 hover:bg-zinc-700/80
                          transition-colors flex items-center justify-between group"
             >
               <span className="text-sm text-white">{r.name_en}</span>
